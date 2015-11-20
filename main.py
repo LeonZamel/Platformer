@@ -1,20 +1,7 @@
-import pygame
+from Platformer import *
 import sys
 import configparser
 import math
-from pygame.locals import *
-
-pygame.init()
-# VARIABLES
-screen = (1024, 1024)
-# STATICS
-SCREEN = pygame.display.set_mode(screen, DOUBLEBUF)
-pygame.display.set_caption("Platformer")
-FPS = 120
-FPSCLOCK = pygame.time.Clock()
-TILESIZE = 16
-
-BLACK = (0, 0, 0)
 
 
 def main():
@@ -151,6 +138,3 @@ class Level(object):
         self.image.fill((255, 255, 255))
         AllPlatforms.draw(self.image)
         return self.image
-
-if __name__ == "__main__":
-    main()
