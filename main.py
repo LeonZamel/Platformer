@@ -1,5 +1,4 @@
 from Platformer import *
-import sys
 import configparser
 import math
 
