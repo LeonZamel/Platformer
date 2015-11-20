@@ -54,15 +54,19 @@ class Player(pygame.sprite.Sprite):
         self.width = 8
         self.height = 16
         self.image = pygame.Surface((self.width, self.height))
-        self.image.fill((255, 255, 0))
         self.rect = pygame.Rect((0, 0), (self.width, self.height))
         self.rect.x = 16
         self.rect.y = 16
+        self.have_image = False
         self.standing = False
-        self.images = pygame.image.load(self.image_name)
-        self.images.convert_alpha()
-        self.images_num = 8
-        self.image_c = 0
+        try:
+            self.images = pygame.image.load(self.image_name)
+            self.images.convert_alpha()
+            self.images_num = 8
+            self.image_c = 0
+            self.have_image = True
+        except pygame.error:
+            self.image.fill((255, 255, 0))
 
     def move(self):
         self.keys_pressed = pygame.key.get_pressed()
@@ -101,14 +105,15 @@ class Player(pygame.sprite.Sprite):
             return True
 
     def render(self):
-        # Image to use
-        if self.image_c >= self.images_num - 1:
-            self.image_c = 0
-        else:
-            self.image_c += 1
 
-        self.image.fill((255, 255, 255, 255))
-        self.image.blit(self.images, (-(self.image_c * self.width), 0))
+        # Image to use
+        if self.have_image:
+            if self.image_c >= self.images_num - 1:
+                self.image_c = 0
+            else:
+                self.image_c += 1
+            self.image.fill((255, 255, 255, 255))
+            self.image.blit(self.images, (-(self.image_c * self.width), 0))
         # ((self.image_c * self.width), 0, self.width, self.height)
         return self.image
 
