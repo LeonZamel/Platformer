@@ -1,6 +1,6 @@
 # Platformer
 A simple platformer written in Python and using pygame
 
-Written in Python version 3.4.3 on 64-bit
+To start the game start the "Platformer.py" script and make sure all files are in the same directory
 
-Requires image for the player
+Written in Python version 3.4.3 on 64-bit although it should work on 32-bit systems
