@@ -29,6 +29,8 @@ def menu():
                     pygame.quit()
                     sys.exit()
 
+        start_button.check_click()
+
         SCREEN.fill((255, 255, 255))
         SCREEN.blit(start_button.render(), start_button.pos)
         pygame.display.flip()
@@ -37,10 +39,26 @@ def menu():
 
 class Button(object):
     def __init__(self, pos, size, color):
+        self.size = size
+        self.clicks = None
+        self.color_u = color
+        self.color_a = (222, 222, 0)
+        self.color = self.color_u
         self.pos = pos
-        self.rect = pygame.Rect(pos, size)
-        self.image = pygame.Surface(size)
-        self.image.fill(color)
+        self.rect = pygame.Rect(self.pos, self.size)
+        self.image = pygame.Surface(self.size)
+        self.image.fill(self.color)
+
+    def check_click(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            self.color = self.color_a
+            self.image.fill(self.color)
+            if pygame.mouse.get_pressed()[0]:
+                main.main()
+        else:
+            self.color = self.color_u
+            self.image.fill(self.color)
+
 
     def render(self):
         return self.image
