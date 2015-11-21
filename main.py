@@ -1,33 +1,41 @@
-from Platformer import *
+import Platformer
 import configparser
 import math
+import pygame
+from pygame.locals import *
+import sys
 
 
 def main():
+    clicking = False
     level = Level("level1.map")
     level.build_map()
     player = Player()
 
     while True:
-        # CHECK QUIT
-        for event in pygame.event.get(QUIT):
-            pygame.quit()
-            sys.exit()
-        # CHECK KEYS
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+        # CHECK EVENTS
+        events = pygame.event.get()
+        for event in events:
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+            if event.type == MOUSEBUTTONUP:
+                clicking = True
+            else:
+                clicking = False
 
         player.move()
-        # SCREEN
-        SCREEN.fill((255, 255, 255))
-        SCREEN.blit(level.render_map(), (0, 0))
-        SCREEN.blit(player.render(), (player.rect.x, player.rect.y))
+        # Platformer.SCREEN
+        Platformer.SCREEN.fill((255, 255, 255))
+        Platformer.SCREEN.blit(level.render_map(), (0, 0))
+        Platformer.SCREEN.blit(player.render(), (player.rect.x, player.rect.y))
 
         pygame.display.flip()
-        FPSCLOCK.tick(FPS)
+        Platformer.FPSCLOCK.tick(Platformer.FPS)
 
 
 class Player(pygame.sprite.Sprite):
@@ -111,9 +119,9 @@ AllPlatforms = pygame.sprite.Group()
 class Platform(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((TILESIZE, TILESIZE))
-        self.color = BLACK
-        self.rect = pygame.Rect(pos[0], pos[1], TILESIZE, TILESIZE)
+        self.image = pygame.Surface((Platformer.TILESIZE, Platformer.TILESIZE))
+        self.color = Platformer.BLACK
+        self.rect = pygame.Rect(pos[0], pos[1], Platformer.TILESIZE, Platformer.TILESIZE)
         AllPlatforms.add(self)
 
 
@@ -125,13 +133,13 @@ class Level(object):
         self.width = len(self.map[0])
         self.height = len(self.map)
         self.image = pygame.Surface(
-            (self.width * TILESIZE, self.height * TILESIZE))
+            (self.width * Platformer.TILESIZE, self.height * Platformer.TILESIZE))
 
     def build_map(self):
         for map_y, line in enumerate(self.map):
             for map_x, c in enumerate(line):
                 if c == "0":
-                    Platform((map_x * TILESIZE, map_y * TILESIZE))
+                    Platform((map_x * Platformer.TILESIZE, map_y * Platformer.TILESIZE))
 
     def render_map(self):
         self.image.fill((255, 255, 255))
