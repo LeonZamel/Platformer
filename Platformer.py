@@ -15,10 +15,12 @@ FPSCLOCK = pygame.time.Clock()
 TILESIZE = 16
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
+screen_center = (screen[0] / 2, screen[1] / 2)
 
 
 def menu():
-    start_button = Button.Button((100, 50), (500, 100), GREEN, "Start game")
+    start_button = Button.Button((screen_center[0] - 500 / 2, 100), (500, 100), GREEN, "Start game")
+    options_button = Button.Button((screen_center[1] - 500 / 2, 300), (500, 100), GREEN, "Options")
     while True:
         # CHECK QUIT
         for event in pygame.event.get(QUIT):
@@ -31,9 +33,11 @@ def menu():
                     sys.exit()
 
         start_button.check_click()
+        options_button.check_click()
 
         SCREEN.fill((255, 255, 255))
         SCREEN.blit(start_button.render(), start_button.pos)
+        SCREEN.blit(options_button.render(), options_button.pos)
         pygame.display.flip()
         FPSCLOCK.tick(FPS)
 
