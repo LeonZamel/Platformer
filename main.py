@@ -6,9 +6,9 @@ from pygame.locals import *
 import sys
 
 
-def main():
+def main(c_level):
     clicking = False
-    level = Level("level1.map")
+    level = Level(c_level)
     level.build_map()
     player = Player()
 
