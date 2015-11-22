@@ -5,7 +5,7 @@ import menu
 
 pygame.init()
 # VARIABLES
-screen = (1024, 1024)
+screen = (1000, 800)
 screen_center = (screen[0] / 2, screen[1] / 2)
 SCREEN = pygame.display.set_mode(screen, DOUBLEBUF)
 pygame.display.set_caption("Platformer")
@@ -19,4 +19,4 @@ DARKGREEN = (0, 200, 0)
 
 
 if __name__ == "__main__":
-    menu.start_menu()
+    menu.start_menu.run()

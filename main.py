@@ -4,9 +4,10 @@ import math
 import pygame
 from pygame.locals import *
 import sys
+c_level = "level1.map"
 
 
-def main(c_level):
+def main():
     clicking = False
     level = Level(c_level)
     level.build_map()
@@ -29,7 +30,6 @@ def main(c_level):
                 clicking = False
 
         player.move()
-        # Platformer.SCREEN
         Platformer.SCREEN.fill((255, 255, 255))
         Platformer.SCREEN.blit(level.render_map(), (0, 0))
         Platformer.SCREEN.blit(player.render(), (player.rect.x, player.rect.y))

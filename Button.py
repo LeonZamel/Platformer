@@ -1,6 +1,8 @@
 import Platformer
 import pygame
 
+buttons = []
+
 
 class Button(object):
     def __init__(self, pos, size, color, text):
@@ -21,7 +23,7 @@ class Button(object):
         self.image.fill(self.color)
 
     def check_click(self, clicking):
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
+        if self.rect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]):
             self.color = self.color_a
             if clicking:
                 return True

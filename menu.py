@@ -6,103 +6,67 @@ from pygame.locals import *
 import sys
 
 
-def start_menu():
-    clicking = False
-    start_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 100), (500, 100),
-                                 (Platformer.GREEN, Platformer.DARKGREEN), "Start game")
-    levels_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 300), (500, 100),
-                                  (Platformer.GREEN, Platformer.DARKGREEN), "Levels")
-    options_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 500), (500, 100),
-                                   (Platformer.GREEN, Platformer.DARKGREEN), "Options")
-    while True:
-        # CHECK EVENTS
-        events = pygame.event.get()
-        for event in events:
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
+class Menu(object):
+    def __init__(self):
+        self.buttons = []
+        self.funcs = []
+        self.clicking = False
+
+    def run(self):
+        while True:
+            # CHECK EVENTS
+            events = pygame.event.get()
+            for event in events:
+                if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-            if event.type == MOUSEBUTTONUP:
-                clicking = True
-            else:
-                clicking = False
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                if event.type == MOUSEBUTTONUP:
+                    self.clicking = True
+                else:
+                    self.clicking = False
 
-        if start_button.check_click(clicking):
-            main.main("level1.map")
-            break
-        if levels_button.check_click(clicking):
-            level_menu()
-            break
-        if options_button.check_click(clicking):
-            options_menu()
-            break
+            for num, button in enumerate(self.buttons):
+                if button.check_click(self.clicking):
+                    self.clicking = False
+                    self.funcs[num]()
+                    break
 
-        Platformer.SCREEN.fill((255, 255, 255))
-        Platformer.SCREEN.blit(start_button.render(), start_button.pos)
-        Platformer.SCREEN.blit(levels_button.render(), levels_button.pos)
-        Platformer.SCREEN.blit(options_button.render(), options_button.pos)
-        pygame.display.flip()
-        Platformer.FPSCLOCK.tick(Platformer.FPS)
+            Platformer.SCREEN.fill((255, 255, 255))
+            for button in self.buttons:
+                Platformer.SCREEN.blit(button.render(), button.pos)
+            pygame.display.flip()
+            Platformer.FPSCLOCK.tick(Platformer.FPS)
 
+# START MENU
+start_menu = Menu()
+start_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 100), (500, 100),
+                             (Platformer.GREEN, Platformer.DARKGREEN), "Start game")
+levels_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 300), (500, 100),
+                              (Platformer.GREEN, Platformer.DARKGREEN), "Levels")
+options_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 500), (500, 100),
+                               (Platformer.GREEN, Platformer.DARKGREEN), "Options")
+start_menu.buttons.extend((start_button, levels_button, options_button))
 
-def options_menu():
-    clicking = False
-    back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 300), (500, 100),
-                                (Platformer.GREEN, Platformer.DARKGREEN), "Back")
-    while True:
-        # CHECK EVENTS
-        events = pygame.event.get()
-        for event in events:
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-            if event.type == MOUSEBUTTONUP:
-                clicking = True
-            else:
-                clicking = False
+# OPTIONS MENU
+options_menu = Menu()
+back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 500), (500, 100),
+                            (Platformer.GREEN, Platformer.DARKGREEN), "Back")
+resolution_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 100), (500, 100),
+                                  (Platformer.GREEN, Platformer.DARKGREEN), "Change resolution")
+options_menu.buttons.extend((back_button, resolution_button))
 
-        if back_button.check_click(clicking):
-            start_menu()
-            break
-
-        Platformer.SCREEN.fill((255, 255, 255))
-        Platformer.SCREEN.blit(back_button.render(), back_button.pos)
-        pygame.display.flip()
-        Platformer.FPSCLOCK.tick(Platformer.FPS)
+# LEVELS MENU
+levels_menu = Menu()
+level_1_button = Button.Button((100, 100), (100, 100), (Platformer.GREEN, Platformer.DARKGREEN), "Level 1")
+back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 300), (500, 100),
+                            (Platformer.GREEN, Platformer.DARKGREEN), "Back")
+levels_menu.buttons.extend((level_1_button, back_button))
 
 
-def level_menu():
-    clicking = False
-    level_1_button = Button.Button((100, 100), (100, 100), (Platformer.GREEN, Platformer.DARKGREEN), "Level 1")
-
-    while True:
-        # CHECK EVENTS
-        events = pygame.event.get()
-        for event in events:
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-            if event.type == MOUSEBUTTONUP:
-                clicking = True
-            else:
-                clicking = False
-
-        if level_1_button.check_click(clicking):
-            main.main("level1.map")
-            break
-
-        Platformer.SCREEN.fill((255, 255, 255))
-        Platformer.SCREEN.blit(level_1_button.render(), level_1_button.pos)
-        pygame.display.flip()
-        Platformer.FPSCLOCK.tick(Platformer.FPS)
+start_menu.funcs.extend((main.main, levels_menu.run, options_menu.run))
+options_menu.funcs.extend((start_menu.run, ))
+levels_menu.funcs.extend((main.main, start_menu.run))
