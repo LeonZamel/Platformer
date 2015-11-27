@@ -4,6 +4,7 @@ import math
 import pygame
 from pygame.locals import *
 import sys
+
 c_level = "level1.map"
 
 

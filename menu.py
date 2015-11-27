@@ -6,6 +6,12 @@ from pygame.locals import *
 import sys
 
 
+class Start(object):
+    def level1(self):
+        main.c_level = "level1.map"
+        main.main()
+
+
 class Menu(object):
     def __init__(self):
         self.buttons = []
@@ -67,6 +73,8 @@ back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 300), (500, 
 levels_menu.buttons.extend((level_1_button, back_button))
 
 
-start_menu.funcs.extend((main.main, levels_menu.run, options_menu.run))
+start = Start()
+
+start_menu.funcs.extend((start.level1, levels_menu.run, options_menu.run))
 options_menu.funcs.extend((start_menu.run, ))
-levels_menu.funcs.extend((main.main, start_menu.run))
+levels_menu.funcs.extend((start.level1, start_menu.run))
