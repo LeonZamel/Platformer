@@ -5,7 +5,7 @@ buttons = []
 
 
 class Button(object):
-    def __init__(self, pos, size, color, text):
+    def __init__(self, func, pos, size, color, text):
         self.font_family = pygame.font.get_default_font()
         self.font = pygame.font.Font(self.font_family, 20)
         self.text = text
@@ -21,6 +21,7 @@ class Button(object):
         self.rect = pygame.Rect(self.pos, self.size)
         self.image = pygame.Surface(self.size)
         self.image.fill(self.color)
+        self.func = func
 
     def check_click(self, clicking):
         if self.rect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]):

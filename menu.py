@@ -38,7 +38,7 @@ class Menu(object):
             for num, button in enumerate(self.buttons):
                 if button.check_click(self.clicking):
                     self.clicking = False
-                    self.funcs[num]()
+                    button.func()
                     break
 
             Platformer.SCREEN.fill((255, 255, 255))
@@ -47,34 +47,34 @@ class Menu(object):
             pygame.display.flip()
             Platformer.FPSCLOCK.tick(Platformer.FPS)
 
-# START MENU
+start = Start()
 start_menu = Menu()
-start_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 100), (500, 100),
+options_menu = Menu()
+levels_menu = Menu()
+# START MENU
+
+start_button = Button.Button(start.level1, (Platformer.screen_center[0] - 500 / 2, 100), (500, 100),
                              (Platformer.GREEN, Platformer.DARKGREEN), "Start game")
-levels_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 300), (500, 100),
+levels_button = Button.Button(levels_menu.run, (Platformer.screen_center[0] - 500 / 2, 300), (500, 100),
                               (Platformer.GREEN, Platformer.DARKGREEN), "Levels")
-options_button = Button.Button((Platformer.screen_center[0] - 500 / 2, 500), (500, 100),
+options_button = Button.Button(options_menu.run, (Platformer.screen_center[0] - 500 / 2, 500), (500, 100),
                                (Platformer.GREEN, Platformer.DARKGREEN), "Options")
+
 start_menu.buttons.extend((start_button, levels_button, options_button))
 
 # OPTIONS MENU
-options_menu = Menu()
-back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 500), (500, 100),
+
+back_button = Button.Button(start_menu.run, (Platformer.screen_center[1] - 500 / 2, 500), (500, 100),
                             (Platformer.GREEN, Platformer.DARKGREEN), "Back")
-resolution_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 100), (500, 100),
+resolution_button = Button.Button(start_menu.run, (Platformer.screen_center[1] - 500 / 2, 100), (500, 100),
                                   (Platformer.GREEN, Platformer.DARKGREEN), "Change resolution")
+
 options_menu.buttons.extend((back_button, resolution_button))
 
 # LEVELS MENU
-levels_menu = Menu()
-level_1_button = Button.Button((100, 100), (100, 100), (Platformer.GREEN, Platformer.DARKGREEN), "Level 1")
-back_button = Button.Button((Platformer.screen_center[1] - 500 / 2, 300), (500, 100),
+
+level_1_button = Button.Button(start.level1, (100, 100), (100, 100), (Platformer.GREEN, Platformer.DARKGREEN), "Level 1")
+back_button = Button.Button(start_menu.run, (Platformer.screen_center[1] - 500 / 2, 300), (500, 100),
                             (Platformer.GREEN, Platformer.DARKGREEN), "Back")
+
 levels_menu.buttons.extend((level_1_button, back_button))
-
-
-start = Start()
-
-start_menu.funcs.extend((start.level1, levels_menu.run, options_menu.run))
-options_menu.funcs.extend((start_menu.run, ))
-levels_menu.funcs.extend((start.level1, start_menu.run))
